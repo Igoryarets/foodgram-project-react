@@ -1,6 +1,5 @@
 from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
-
 from users_api.models import Subscription, User
 
 from .models import (FavoriteRecipe, Ingredient, Recipe, RecipeIngredient,
@@ -125,6 +124,14 @@ class ShopRecipeSerializer(serializers.ModelSerializer):
         model = ShoppingCart
         fields = ('id', 'name', 'image', 'cooking_time',)
 
+    def validate(self, data):
+        if ShoppingCart.objects.filter(
+                user=data['user'], recipe=data['recipe']).exists():
+            raise serializers.ValidationError(
+                'Такой рецепт уже есть в корзине'
+            )
+        return data
+
 
 class FavoriteRecipeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source='recipe.id')
@@ -135,3 +142,11 @@ class FavoriteRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteRecipe
         fields = ('id', 'name', 'image', 'cooking_time',)
+
+    def validate(self, data):
+        if FavoriteRecipe.objects.filter(
+                user=data['user'], recipe=data['recipe']).exists():
+            raise serializers.ValidationError(
+                'Такой рецепт уже есть в списке избранных'
+            )
+        return data

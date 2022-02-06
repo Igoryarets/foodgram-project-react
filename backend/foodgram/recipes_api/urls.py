@@ -1,9 +1,10 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
+from .utils import download_shopping_cart
 from .views import (AddDeleteFavoriteRecipe, AddDeleteShoppingCart,
                     IngridientListDetail, RecipeListDetailUpdate,
-                    TagListDetail, download_shopping_cart)
+                    TagListDetail)
 
 router = SimpleRouter()
 

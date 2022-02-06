@@ -1,9 +1,9 @@
 import django.contrib.auth.password_validation as ValidatePassword
+from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers
-
 from recipes_api.models import Recipe
+from rest_framework import serializers
 
 from .models import Subscription, User
 
@@ -43,6 +43,13 @@ class UserNewPasswordSerializer(serializers.Serializer):
     def validate_new_password(self, value):
         ValidatePassword.validate_password(value)
         return value
+
+    def validate_current_password(self, current_password):
+        user = self.context['request'].user
+        if not authenticate(username=user, password=current_password):
+            raise serializers.ValidationError(
+                {'password': 'Введен неверный пароль.'}
+            )
 
     def create(self, validated_data):
         user = self.context['request'].user
@@ -96,6 +103,19 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             'id', 'email', 'username', 'first_name', 'last_name',
             'is_subscribed', 'recipes', 'recipes_count',
         )
+
+    def validate(self, data):
+        if data['user_id'] == data['author_id']:
+            raise serializers.ValidationError(
+                'Нельзя подписаться на самого себя'
+            )
+        if Subscription.objects.filter(
+            user=data['user'], author=data['author']
+        ).exists():
+            raise serializers.ValidationError(
+                'Такая подписка существует'
+            )
+        return data
 
     def get_is_subscribed(self, object):
         return Subscription.objects.filter(

@@ -50,10 +50,11 @@ def set_password(request):
     serializer = UserNewPasswordSerializer(
         data=request.data, context={'request': request}
     )
-    if serializer.is_valid():
-        serializer.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(
+        'Пароль успешно изменен', status=status.HTTP_204_NO_CONTENT
+    )
 
 
 class SubscriptionList(viewsets.ReadOnlyModelViewSet):
@@ -66,25 +67,18 @@ class SubscriptionList(viewsets.ReadOnlyModelViewSet):
 
 class SubscriptionApi(generics.CreateAPIView, generics.DestroyAPIView):
 
-    queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
     def create(self, request, *args, **kwargs):
         author_id = kwargs['user_id']
         author = get_object_or_404(User, id=author_id)
-
-        if request.user.id == author_id:
-            return Response(
-                {'errors': 'Нельзя подписаться на самого себя'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        if Subscription.objects.filter(
-            user=self.request.user, author=author
-        ).exists():
-            return Response(
-                {'errors': 'Такая подписка существует'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        data = {
+            'user_id': request.user.id,
+            'author_id': author_id,
+            'user': self.request.user,
+            'author': author
+        }
+        self.get_serializer().validate(data)
         subscription = Subscription.objects.create(
             user=self.request.user, author=author
         )
