@@ -9,3 +9,5 @@ django-colorfield
 reportlab==3.6.6
 isort==5.10.1
 python-dotenv==0.19.1
+gunicorn==20.0.4
+psycopg2-binary==2.8.6

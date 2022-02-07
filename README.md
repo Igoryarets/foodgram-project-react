@@ -1,5 +1,23 @@
 # praktikum_new_diplom
 
+## Запуск проекта через Docker
+
+Собрать контейнер:
+- docker-compose up -d
+
+Выполнить следующие команды:
+```
+docker-compose exec backend python manage.py makemigrations
+docker-compose exec backend python manage.py migrate --noinput 
+docker-compose exec backend python manage.py createsuperuser
+docker-compose exec backend python manage.py collectstatic --no-input
+```
+Заполнить бд ингредиентами:
+```
+docker-compose exec web python manage.py load_ingredients
+```
+
+
 ## Запуск проекта в dev-режиме
 
 - Установить и активировать виртуальное окружение
