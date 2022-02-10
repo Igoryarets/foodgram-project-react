@@ -7,10 +7,10 @@
 
 Выполнить следующие команды:
 ```
-docker-compose exec backend python manage.py makemigrations
-docker-compose exec backend python manage.py migrate --noinput 
-docker-compose exec backend python manage.py createsuperuser
-docker-compose exec backend python manage.py collectstatic --no-input
+sudo docker-compose exec backend python manage.py makemigrations
+sudo docker-compose exec backend python manage.py migrate --noinput 
+sudo docker-compose exec backend python manage.py createsuperuser
+sudo docker-compose exec backend python manage.py collectstatic --no-input
 ```
 Заполнить бд ингредиентами:
 ```
