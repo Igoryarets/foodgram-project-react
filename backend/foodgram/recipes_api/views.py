@@ -91,9 +91,6 @@ class TagListDetail(viewsets.ReadOnlyModelViewSet):
 class IngridientListDetail(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (
-        IngredientFilter, filters.OrderingFilter
-    )
+    filter_class = IngredientFilter
     search_fields = ('^name',)
-    ordering_fields = ('name',)
     pagination_class = None
