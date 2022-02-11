@@ -4,7 +4,7 @@ from rest_framework import filters, generics, status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from .filter import RecipeFilter, IngredientFilter
+from .filter import IngredientFilter, RecipeFilter 
 from .models import FavoriteRecipe, Ingredient, Recipe, ShoppingCart, Tag
 from .permissions import AuthorOrReadOnly
 from .serializers import (FavoriteRecipeSerializer, IngredientSerializer,
