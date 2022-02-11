@@ -4,7 +4,7 @@ from rest_framework import filters, generics, status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from .filter import RecipeFilter
+from .filter import RecipeFilter, IngredientFilter
 from .models import FavoriteRecipe, Ingredient, Recipe, ShoppingCart, Tag
 from .permissions import AuthorOrReadOnly
 from .serializers import (FavoriteRecipeSerializer, IngredientSerializer,
@@ -91,4 +91,9 @@ class TagListDetail(viewsets.ReadOnlyModelViewSet):
 class IngridientListDetail(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+    filter_backends = (
+        IngredientFilter, filters.OrderingFilter
+    )
+    search_fields = ('^name',)
+    ordering_fields = ('name',)
     pagination_class = None
