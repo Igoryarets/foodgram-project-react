@@ -78,7 +78,7 @@ class AddDeleteFavoriteRecipe(generics.CreateAPIView, generics.DestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class TagListDetail(viewsets.ReadOnlyModelViewSet):
+class TagListDetail(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (AllowAny,)
@@ -88,9 +88,12 @@ class TagListDetail(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
 
 
-class IngridientListDetail(viewsets.ReadOnlyModelViewSet):
+class IngridientListDetail(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_class = IngredientFilter
+    filter_backends = (
+        IngredientFilter, filters.OrderingFilter
+    )
     search_fields = ('^name',)
+    ordering_fields = ('name',)
     pagination_class = None
