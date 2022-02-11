@@ -16,12 +16,7 @@ class RecipeListDetailUpdate(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = (AuthorOrReadOnly,)
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter,
-                       filters.SearchFilter)
-    filter_class = RecipeFilter
-    filterset_fields = ('tags', 'author')
-    ordering_fields = ('name',)
-    search_fields = ('ingredients',)
+    filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
