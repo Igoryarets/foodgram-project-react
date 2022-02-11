@@ -93,6 +93,6 @@ class IngridientListDetail(viewsets.ModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = (AllowAny,)
     pagination_class = None
-    http_method_names = ["get"]
+    http_method_names = ['get']
     filter_backends = (IngredientFilter,)
     search_fields = ('^name',)

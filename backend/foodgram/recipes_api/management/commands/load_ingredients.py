@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = 'Load data from csv files'
 
     def handle(self, *args, **kwargs):
-        current_dir = r'\data\ingredients.csv'
+        current_dir = r'/data/ingredients.csv'
         data_path = settings.BASE_DIR + current_dir
         with open(
             data_path, 'r', encoding='utf-8'
